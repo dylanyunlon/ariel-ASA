@@ -1,0 +1,29 @@
+NOTICE
+
+This software uses the following third-party libraries:
+
+================================================================================
+
+CLI11
+-----
+Copyright (c) 2017-2026 University of Cincinnati
+Developed by Henry Schreiner under NSF AWARD 1414736
+
+License: BSD-3-Clause
+License Location: THIRD_PARTY_LICENSES/CLI11LICENSE
+Repository: https://github.com/CLIUtils/CLI11
+
+================================================================================
+
+cuVS
+-------------------------
+Copyright 2020 NVIDIA Corporation
+
+License: Apache-2.0
+License Location: THIRD_PARTY_LICENSES/cuvsLICENSE
+Repository: https://github.com/rapidsai/cuvs
+
+================================================================================
+
+For full license texts, please refer to the files in the THIRD_PARTY_LICENSES
+directory.
