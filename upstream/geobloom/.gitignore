@@ -1,0 +1,87 @@
+# Compiled object files
+*.o
+*.obj
+
+# Compiled dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled executables
+*.exe
+*.out
+
+# C++ build artifacts
+build/
+bin/
+
+# Python build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+
+# IDE specific files
+.vscode/
+*.code-workspace
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+
+# Large data files and sensitive/ignored data
+*.nfs*
+data/Beijing/
+data/Shanghai/
+data/GeoGLUE/
+data/GeoGLUE_clean/
+data/Beijing_subset/
+data/Shanghai_subset/
+
+baselines/DPR_POI/wandb/
+baselines/DPR_POI/embeddings/
+baselines/DPR_POI/hard_negatives/
+baselines/DPR_POI/cpp/
+baselines/DPR_POI/inference_util/
+
+ckpt/
+data_bin/GeoGLUE*/test_nodes.bin
+data_bin/GeoGLUE*/poi.bin
+data_bin/GeoGLUE*/test.bin
+data_bin/GeoGLUE*/train.bin
+data_bin/GeoGLUE*/dev.bin
+data_bin/GeoGLUE*/node_v19.bin
+data_bin/GeoGLUE*/nnue_v19.bin
+data_bin/GeoGLUE*/node_v19_size_test.bin
+data_bin/GeoGLUE*/nnue_v19_size_test.bin
+data_bin/GeoGLUE*/node_v19_size_test.bin
+# No longer tracking these trained models as they frequently change
+data_bin/Beijing/nnue_v19.bin
+data_bin/Beijing/node_v19.bin
+data_bin/Beijing/test_nodes.bin
+data_bin/Beijing/nnue_v19_size_test.bin
+data_bin/Beijing/node_v19_size_test.bin
+# No longer tracking these trained models as they frequently change
+data_bin/Shanghai/nnue_v19.bin
+data_bin/Shanghai/node_v19.bin
+data_bin/Shanghai/test_nodes.bin
+data_bin/Shanghai/nnue_v19_size_test.bin
+data_bin/Shanghai/node_v19_size_test.bin
+model/tmp/
+nnue/v19/nnue
+nnue/v19/nnue_uncompressed
+nnue/v19/nnue_unsupervised
+legacy/
+result/GeoBloom/Beijing/
+result/GeoBloom/Shanghai/
+result/*.npy
+result/*.txt
+debug/
+model/encrypt_func.py
+openai_api_key.txt
+result/*.log
+result/*.png
+result/GeoBloom/*

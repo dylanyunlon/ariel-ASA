@@ -1,0 +1,200 @@
+Museum with arcade games but without special events and coupons available and pet-friendly	3904.1420820228755	262.1059210372789	2435
+University with outdoor seating and smoking area but without happy hour and delivery service and free parking	1285.5741421298073	7911.794767572094	1605
+Park with buffet but without alcoholic beverages and seafood and private rooms	3894.5295726947816	9747.785969790923	4700
+Furniture Store with outdoor seating and arcade games and alcoholic beverages but without kids-friendly and ATM available and 24/7 service	9522.018949607515	3805.3177321095986	1095
+Clothing Store with delivery service but without pool table and coupons available and arcade games	1332.3995222449348	2450.4662090799234	2640
+Supermarket with pet-friendly and kids-friendly but without electric vehicle charging and coupons available and takeaway service	9207.758881395765	5453.575454361231	1860
+Supermarket with gluten-free options and seasonal discounts and reservation required but without electric vehicle charging and play area and self-checkout	4089.597769288832	3012.347041135669	3220
+Hotel with parking but without wifi and private rooms and pool table	2922.515303281673	5856.4461492561095	2500
+Museum with group classes but without alcoholic beverages and meat dishes and heating	599.7894025431094	3174.7949080700787	3560
+Park with pool table but without parking and smoking area and seafood	1326.308783895027	364.67429037546964	4455
+Bar with pet-friendly and air conditioning and happy hour but without parking and onsite security	5033.927963591861	7550.294411646014	4185
+Beauty Salon with electric vehicle charging but without parking and free parking and vegan options	1397.313526258288	2644.7968486886807	1555
+Bank with private rooms and vegan options but without seafood and group classes and gluten-free options	8345.463505349047	9829.803717144398	1820
+Pharmacy with live music but without onsite security and air conditioning and private rooms	3585.1862186838757	517.932763008283	2335
+Spa with heating but without wheelchair accessible and guided tours and group classes	3027.893746187961	4218.590722110301	3535
+Clinic with outdoor seating and guided tours and live music but without kids-friendly and alcoholic beverages and heating	8603.035738937298	5254.104975583808	605
+Bank with pet-friendly and arcade games but without vegan options and smoking area and membership required	4365.846016658152	9647.183435461255	2465
+Pharmacy with personal trainer and ATM available but without dairy products and delivery service and valet parking	2970.0891203975566	5397.050123826366	565
+Police Station with dairy products and group classes but without ATM available and karaoke and free samples	8721.40190576011	1341.6893385038343	1495
+Cinema with air conditioning and onsite security and group classes but without self-checkout and parking and meat dishes	698.8373257421754	2984.24479462965	4220
+Supermarket with ATM available and first aid available and indoor seating but without electric vehicle charging and outdoor seating and dairy products	7380.497842851585	6708.966541004985	4925
+Bookstore with dairy products but without seasonal discounts and membership required and electric vehicle charging	1913.1717330200458	8865.644646469867	4315
+Cafe with buffet but without parking and gluten-free options and alcoholic beverages	9897.09316972064	7568.657513402534	1905
+Cinema with personal trainer and gift shop and electric vehicle charging but without indoor seating and wheelchair accessible and valet parking	5180.677501787313	365.0438271939749	1490
+Supermarket with coupons available and self-checkout but without wheelchair accessible and vegetarian meals and indoor seating	4695.495669375754	498.1867669161799	4355
+Bar with buffet and alcoholic beverages and outdoor seating but without coupons available and seafood and private rooms	9851.284123406364	94.21546243546297	4165
+Hospital with valet parking and onsite security and membership required but without vegan options and gift shop and free parking	2602.472784925416	3476.833748541295	2150
+Electronics Store with membership required but without meat dishes and kids-friendly and seasonal discounts	7671.917127508276	4259.208391963762	1790
+Bar with coupons available and drive-through and pool table but without reservation required and happy hour and alcoholic beverages	4938.606925379087	2354.6458486480947	4495
+Pharmacy with happy hour but without smoking area and takeaway service and personal trainer	4313.625116777566	1885.7701480166722	2060
+Electronics Store with pool table and seasonal discounts but without valet parking and kids-friendly and smoking area	3004.5447741877874	7990.450877391539	3480
+Spa with electric vehicle charging and 24/7 service but without meat dishes and wifi and free samples	8580.036688249258	7616.061557397289	180
+Zoo with meat dishes but without vegan options and guided tours and gift shop	2111.8714940614736	3979.961638345649	3575
+Bar with karaoke and reservation required and play area but without gluten-free options and first aid available and wifi	7105.395184212562	6639.919592277303	1190
+School with air conditioning but without first aid available and wifi and reservation required	7120.8073272521415	2439.2211935090536	4840
+Hotel with parking and indoor seating and alcoholic beverages but without electric vehicle charging and 24/7 service and outdoor seating	5695.4447222011995	6726.613184386394	2530
+Pet Store with seasonal discounts but without valet parking and heating and kids-friendly	6131.162152537069	4171.134227546739	3110
+Nightclub with valet parking but without wheelchair accessible and seafood and air conditioning	8631.806917407746	6412.191797340889	4990
+Supermarket with first aid available and buffet but without drive-through and vegan options and membership required	9530.693230132034	2291.461685745746	4140
+Beauty Salon with first aid available and reservation required but without free parking and self-checkout and play area	3069.802160854811	9865.070442067019	3125
+Park with valet parking and personal trainer and wifi but without free parking and vegan options and drive-through	6199.245279013212	3710.2029875791154	2395
+Hotel with buffet but without delivery service and first aid available and vegan options	3570.6721393854755	5635.003734801971	3160
+Supermarket with group classes and private rooms and meat dishes but without electric vehicle charging and heating and parking	6848.751329835194	4672.347233164705	3215
+Furniture Store with parking and first aid available but without seasonal discounts and karaoke and kids-friendly	6240.575425103547	3172.1914903598004	3250
+Pharmacy with gift shop and dairy products but without 24/7 service and delivery service	5716.355376232082	5718.426446306017	875
+Beauty Salon with special events and seasonal discounts and takeaway service but without alcoholic beverages and group classes and self-checkout	8389.486559653898	3782.6396164320254	790
+Bar with gift shop and heating and free samples but without special events and guided tours and valet parking	7546.619605404595	7982.690698475314	4330
+Park with arcade games and alcoholic beverages but without valet parking and live music and delivery service	5343.759274846918	8996.038636200212	980
+Hotel with ATM available and private rooms but without self-checkout and delivery service and wheelchair accessible	102.9683413668736	8351.433151627343	3240
+Gym with kids-friendly but without happy hour and seasonal discounts and self-checkout	6818.537998456585	2004.8567210847668	4205
+Nightclub with parking and pet-friendly but without indoor seating and ATM available and seasonal discounts	398.77986316027346	7626.182735593151	2165
+Police Station with seafood but without delivery service and live music and free parking	3839.0464730047547	9176.284532839796	4945
+Shopping Mall with free parking but without buffet and heating and delivery service	2985.298188813574	3688.182094874287	3665
+Bakery with parking and play area but without kids-friendly and free parking and seafood	9771.413828993542	8065.123305615978	3845
+Museum with drive-through but without reservation required and smoking area and play area	3894.953290150639	6902.1744937736785	1020
+Police Station with seasonal discounts but without self-checkout and indoor seating and membership required	5935.172918971846	2784.5716385566657	160
+Hospital with electric vehicle charging and vegetarian meals but without karaoke and heating and group classes	6673.862227533488	466.4967566615774	3990
+Cafe with onsite security but without drive-through and heating and personal trainer	5268.132354376466	1241.048146830247	585
+Shopping Mall with coupons available but without seasonal discounts and membership required and dairy products	7199.757638692506	5501.2472913058455	4085
+Gym with air conditioning and electric vehicle charging but without heating and self-checkout and ATM available	1806.339378382299	1555.7229152849227	2845
+Cinema with air conditioning and group classes and delivery service but without live music and kids-friendly and onsite security	551.1354946189806	2947.462372851666	1355
+Nightclub with meat dishes and special events but without happy hour and wifi and reservation required	5690.248608467165	8351.944601882764	4610
+Museum with karaoke and gluten-free options and onsite security but without play area and self-checkout and takeaway service	7906.014720871479	73.9764350404859	1300
+Amusement Park with vegetarian meals and outdoor seating but without heating and parking and membership required	5340.670551767479	5063.650774563423	3170
+Pharmacy with drive-through and seasonal discounts and onsite security but without parking and vegan options and private rooms	9322.073466128257	9946.153473926395	1415
+Park with vegetarian meals but without karaoke and pool table and pet-friendly	1294.9896398600947	5664.905327922327	4035
+Clothing Store with wheelchair accessible and heating but without parking and onsite security	2391.258851305068	1944.4726421856274	2765
+Bakery with gluten-free options but without wheelchair accessible and happy hour and play area	5548.386786707098	8530.61397773741	3840
+Gym with coupons available and play area and dairy products but without personal trainer and guided tours and pool table	4832.877225328946	2710.396577783014	720
+Park with karaoke and heating but without guided tours and membership required and gluten-free options	2851.9379274940525	7831.141316150202	2615
+Nightclub with coupons available but without seasonal discounts and live music and ATM available	1659.6624290018913	2381.0513288856337	2950
+School with arcade games and self-checkout and dairy products but without free parking and vegetarian meals	2167.3926376274744	994.8201418170677	4805
+Electronics Store with seafood and outdoor seating but without first aid available and buffet and meat dishes	8076.397447273278	4764.4546283795535	4370
+Hotel with coupons available but without karaoke and onsite security and buffet	1212.3545717052718	9910.018279441909	4005
+Pet Store with coupons available and special events and parking but without wifi and wheelchair accessible and dairy products	4382.977868196447	3509.097128733284	1195
+Supermarket with pet-friendly and gift shop but without group classes and heating and reservation required	3352.4613417155156	800.4828264213426	3685
+Supermarket with pool table but without indoor seating and kids-friendly and seasonal discounts	4335.1137771970825	4467.049111608905	360
+Museum with gluten-free options and alcoholic beverages and ATM available but without special events and outdoor seating and seasonal discounts	3101.2604198408367	4625.930645329504	350
+Museum with gluten-free options but without kids-friendly and vegetarian meals and happy hour	9422.70247943793	8502.787376797249	3335
+Amusement Park with seasonal discounts but without gift shop and pet-friendly and private rooms	302.7037482175654	1294.0780366346971	1570
+Gas Station with wifi and gift shop but without onsite security and reservation required and free samples	7688.562292235483	1910.2750121055778	3880
+Furniture Store with takeaway service and ATM available and indoor seating but without drive-through and arcade games and pool table	1769.4638010103092	1718.4046380215457	3525
+Bookstore with arcade games but without pool table and free samples and private rooms	8863.446257267477	6834.208801906675	1710
+Nightclub with air conditioning but without seafood and takeaway service and membership required	4451.248696281184	489.50265766406596	4720
+Park with special events but without dairy products and reservation required and personal trainer	8462.248334797323	9789.066021625462	60
+Police Station with delivery service and meat dishes but without play area and ATM available and karaoke	10.855509468852276	5250.33045164114	4685
+Amusement Park with outdoor seating and electric vehicle charging but without buffet and vegetarian meals and parking	438.1265475828988	2727.039230907524	1625
+Electronics Store with guided tours but without vegetarian meals and outdoor seating and parking	9658.568611371846	2368.7676943223714	1225
+Beauty Salon with free samples and karaoke but without smoking area and live music	9722.312552942689	8852.91994817863	2750
+Museum with dairy products but without indoor seating and reservation required and onsite security	179.37064375560973	9424.296119191244	2470
+Post Office with onsite security and smoking area but without parking and air conditioning and free samples	3856.150341778527	8028.565559873525	700
+Museum with pool table and parking and takeaway service but without gift shop and live music and first aid available	8744.689303505864	6702.028401193117	4055
+Gas Station with ATM available and pool table but without takeaway service	4348.551265354952	148.33111961101042	2550
+Zoo with reservation required and delivery service and seafood but without wifi and parking and self-checkout	8037.631325072031	8705.202014616747	4190
+Museum with delivery service and karaoke and dairy products but without vegan options and air conditioning and seafood	4566.114228439426	7301.236644861495	1210
+Police Station with alcoholic beverages and meat dishes and free parking but without takeaway service and free samples and drive-through	3021.643751835351	6824.901019648049	1590
+Zoo with live music and coupons available but without drive-through and vegetarian meals and ATM available	2938.9768297562377	4830.9378515804565	2405
+Zoo with arcade games but without drive-through and parking and reservation required	807.2942167368968	1744.2535469903642	105
+Clinic with wifi and air conditioning but without meat dishes and outdoor seating and play area	7632.235250869053	2996.6448732189633	735
+Nightclub with meat dishes but without gluten-free options and air conditioning and 24/7 service	4779.260025453723	5822.764770646888	2505
+Cafe with live music and electric vehicle charging but without indoor seating and air conditioning and special events	9377.261917037025	7826.0338571923385	1080
+Police Station with guided tours but without karaoke and free samples and dairy products	6850.679080190888	7848.558944743221	3765
+Hospital with guided tours and self-checkout but without drive-through and private rooms and gluten-free options	9401.620473380446	8665.362267245058	925
+Pharmacy with free samples and kids-friendly but without buffet and live music and air conditioning	5528.80723596054	6321.963621577189	3775
+Hospital with first aid available and parking and coupons available but without meat dishes and air conditioning and reservation required	5209.26722847253	2031.4636283148445	4835
+Pet Store with takeaway service but without personal trainer and vegetarian meals and alcoholic beverages	2648.3451031991667	9016.877395737312	435
+Hotel with seasonal discounts but without electric vehicle charging and free samples and special events	154.89801110917688	6225.086542441743	3790
+Bar with vegan options and personal trainer and dairy products but without pet-friendly and gift shop and parking	2455.9479149080075	7996.1586358656	1580
+Library with seasonal discounts and vegan options and group classes but without live music and kids-friendly and happy hour	8906.757576217475	1699.953274051117	2355
+Nightclub with outdoor seating and coupons available and special events but without heating and takeaway service and buffet	1369.0463550461407	8759.271743022793	215
+Gym with drive-through and group classes but without vegan options and private rooms and electric vehicle charging	354.8855777589088	2201.1589043541267	3225
+Cafe with electric vehicle charging and takeaway service but without play area and onsite security and parking	8969.472051446295	8227.77635886248	3825
+Pet Store with seafood and coupons available but without drive-through and indoor seating and reservation required	4821.809458944049	934.9326969981897	1665
+Zoo with buffet and vegetarian meals but without gluten-free options and seasonal discounts and drive-through	4540.637326758523	4817.8109138543105	4795
+Spa with takeaway service and personal trainer but without gluten-free options and free samples and delivery service	6416.472973528179	651.5714014201357	970
+Restaurant with pet-friendly and arcade games and free samples but without happy hour and alcoholic beverages and personal trainer	8710.88918109679	9864.815470205516	3035
+Zoo with outdoor seating and free samples but without takeaway service and air conditioning and gluten-free options	7084.993698221543	8607.50830279174	240
+Zoo with special events and kids-friendly and vegan options but without happy hour and 24/7 service and heating	9029.565409274855	3866.189243795445	2410
+Museum with group classes and vegan options but without seasonal discounts and coupons available and special events	7115.306472416154	980.7395664641449	2155
+Clothing Store with outdoor seating and wifi and free parking but without meat dishes and electric vehicle charging and seasonal discounts	2108.1434851273475	1830.3138419229515	2190
+Restaurant with group classes and gluten-free options but without wifi and indoor seating and first aid available	8028.075688489046	2393.7724651297467	520
+Bakery with 24/7 service and gift shop and pet-friendly but without wheelchair accessible and delivery service and karaoke	2835.21289825269	6532.9356108744	150
+Pet Store with pet-friendly but without live music and reservation required and special events	5531.1927291302445	1065.4968468168802	4010
+Beauty Salon with seafood and free parking but without pool table and free samples	7943.456272187417	3318.390606048157	895
+Supermarket with coupons available but without takeaway service and free samples and guided tours	9079.344190448553	6448.811613459825	4600
+Beauty Salon with vegan options and arcade games but without membership required and onsite security and vegetarian meals	341.27790188844045	9222.958711291983	2850
+School with alcoholic beverages and live music but without delivery service and kids-friendly and meat dishes	9296.603261011705	2208.8769283690513	2390
+Bank with electric vehicle charging and group classes but without membership required and pet-friendly and private rooms	7346.266963915819	8633.65147039177	4280
+Furniture Store with guided tours and karaoke and drive-through but without meat dishes and pool table and pet-friendly	7437.564095363205	925.0187681815258	1350
+Beauty Salon with seasonal discounts and first aid available but without onsite security and group classes and pet-friendly	7805.199910429718	5079.920956553114	130
+Bank with private rooms and valet parking but without first aid available and ATM available and live music	9131.537501796829	841.7322330624078	2300
+Cinema with vegetarian meals and free samples but without self-checkout and seafood and guided tours	6041.418306666712	6201.352905963935	110
+Bar with takeaway service and seafood but without coupons available and alcoholic beverages and pool table	1627.00438014609	2361.319302445486	805
+Bank with coupons available and smoking area and takeaway service but without vegan options and dairy products and meat dishes	3358.823814053815	3391.4923130185202	1235
+Park with drive-through but without live music and alcoholic beverages and seafood	1147.7572306280204	2381.553158560443	3490
+Gym with free parking and pet-friendly but without vegetarian meals and ATM available and guided tours	494.6115009893315	9759.251919999999	1410
+Gym with kids-friendly and indoor seating and free parking but without membership required and drive-through and air conditioning	1081.716349495393	6164.6226429786375	3630
+Bank with smoking area and heating and indoor seating but without arcade games and coupons available and seafood	3160.276929750989	572.40459640301	1445
+Bookstore with kids-friendly but without buffet and gluten-free options and takeaway service	98.84586656369487	5971.452631408496	4200
+Spa with drive-through and special events but without onsite security and happy hour and vegetarian meals	6786.946340940042	785.8039729779654	4975
+Amusement Park with wifi and wheelchair accessible but without buffet and seafood and self-checkout	2267.303068611829	9884.641913767884	270
+Clothing Store with play area and pool table but without vegetarian meals and self-checkout and wifi	3497.4721654528594	5557.117858887514	2380
+Beauty Salon with valet parking and personal trainer but without free samples and guided tours and parking	2753.4958812104946	4532.515342448314	1380
+University with coupons available and free parking but without live music and air conditioning and first aid available	8888.346050666003	3443.9511245031686	610
+Bakery with onsite security and kids-friendly but without 24/7 service and happy hour and seafood	2175.1405498637664	3201.221945347734	2955
+Post Office with vegetarian meals but without play area and indoor seating and coupons available	4066.9541362465225	8920.522405041162	195
+Hotel with arcade games and pet-friendly but without play area and seasonal discounts and free samples	4244.101822091985	3511.4559311448133	1950
+Gas Station with electric vehicle charging and coupons available and self-checkout but without indoor seating and 24/7 service and pet-friendly	2279.9186723057605	8500.037445212492	1455
+Pet Store with karaoke and wifi but without vegan options and electric vehicle charging and live music	6428.705652512903	8965.579478575017	2085
+Spa with takeaway service and 24/7 service but without drive-through and pet-friendly and ATM available	1930.54876119379	5394.540328152117	2385
+Library with pet-friendly and play area but without arcade games and vegetarian meals and ATM available	9942.778940175735	5153.31981573033	4850
+Post Office with parking but without membership required and karaoke and kids-friendly	7022.785258440956	1012.9179460201665	4360
+Museum with reservation required but without group classes and vegetarian meals and happy hour	6144.265703715426	1644.2114992309941	2170
+Cafe with play area and kids-friendly and special events but without vegan options and electric vehicle charging and seasonal discounts	5701.642499389792	7857.539310486801	3835
+Cafe with takeaway service but without group classes	5644.39907311067	1117.272962327498	3070
+Clinic with air conditioning and play area and first aid available but without coupons available and group classes	6439.998797913517	4133.460809055693	1720
+Library with gift shop and first aid available but without happy hour and gluten-free options and takeaway service	3061.115644147625	2193.8830098943895	1865
+Park with smoking area and parking and buffet but without alcoholic beverages and gluten-free options and pet-friendly	3730.19731080554	3326.9903236077357	510
+Hotel with heating but without private rooms and takeaway service and vegetarian meals	5226.934294737933	7423.435434991974	590
+Bank with happy hour and pet-friendly but without 24/7 service and vegetarian meals and gift shop	8349.205271613988	6308.699705451601	405
+Police Station with vegan options and wheelchair accessible and vegetarian meals but without karaoke and group classes and 24/7 service	9532.390266556667	3559.4463690085922	4770
+Shopping Mall with wheelchair accessible and pool table but without membership required and play area and gluten-free options	3296.2999287782122	2077.245214020429	245
+Hospital with drive-through and kids-friendly but without self-checkout and membership required and vegetarian meals	9976.42625729134	1619.4997725375515	1330
+Zoo with 24/7 service and happy hour and vegetarian meals but without alcoholic beverages and karaoke and special events	3825.240925876415	2804.744283846027	3955
+Cafe with seafood but without alcoholic beverages and heating and ATM available	5254.898851927915	5113.374921097345	2835
+Hotel with alcoholic beverages and delivery service and gluten-free options but without electric vehicle charging and personal trainer and gift shop	8058.273856604441	1129.232333546134	2185
+University with pet-friendly but without wheelchair accessible and takeaway service and self-checkout	130.9512946837621	914.7208716205702	2700
+Clinic with pet-friendly and wheelchair accessible but without outdoor seating and group classes and play area	4630.083709524615	1425.0866490510605	4435
+Park with gift shop and indoor seating but without drive-through and vegetarian meals and reservation required	1559.417195559797	7750.619850732277	1035
+Restaurant with karaoke but without special events and kids-friendly and pool table	9291.835542377135	6335.882149228509	2325
+Bookstore with membership required and meat dishes but without outdoor seating and arcade games and dairy products	1278.0613279350962	4719.893983880565	2010
+Spa with outdoor seating and dairy products and ATM available but without happy hour and wifi and pool table	6445.298167931882	131.5972936203147	2485
+Furniture Store with outdoor seating but without first aid available and buffet and wifi	9602.490643940819	6151.499305627829	820
+Restaurant with special events and free samples and membership required but without outdoor seating and vegan options and vegetarian meals	4440.0079228972045	8240.193351287795	2960
+University with parking but without delivery service and electric vehicle charging and drive-through	2523.5646420543544	1746.3656931917071	2070
+Bank with seasonal discounts but without play area and pet-friendly and free parking	9153.354754214577	6987.7516862305765	1505
+Supermarket with live music and pet-friendly but without self-checkout and seasonal discounts and gift shop	2157.8510497194316	5769.342615459699	2605
+Library with ATM available and private rooms and pet-friendly but without self-checkout and delivery service and meat dishes	4392.496566060951	7088.041997031171	340
+Restaurant with private rooms and electric vehicle charging but without parking and wheelchair accessible and pet-friendly	656.5727950566413	8422.843864070077	3080
+Pet Store with special events and dairy products and guided tours but without live music and private rooms and 24/7 service	8508.701614167821	3733.5151385699983	440
+Police Station with delivery service and electric vehicle charging and reservation required but without valet parking and wifi and play area	7600.153041348089	8869.14861799871	3920
+Nightclub with outdoor seating but without first aid available and meat dishes and group classes	6401.965548746417	5021.279072783127	4555
+Cafe with meat dishes but without group classes and gift shop and air conditioning	3123.5178323787973	4068.9316081091565	2075
+Pet Store with gift shop and self-checkout but without alcoholic beverages and smoking area and private rooms	5303.212989688815	1389.6663738542925	3850
+Supermarket with air conditioning but without gluten-free options and vegetarian meals and gift shop	1030.190492526798	3421.6923146588483	825
+Shopping Mall with seafood but without self-checkout and delivery service and meat dishes	9263.256951603316	1164.5682330813856	2890
+Supermarket with personal trainer and 24/7 service and seasonal discounts but without wheelchair accessible and delivery service and arcade games	8767.515811101877	2762.8184885013175	120
+Clothing Store with reservation required but without group classes and takeaway service and alcoholic beverages	9581.087782651852	2239.7331381348586	1280
+School with reservation required and happy hour and outdoor seating but without group classes and guided tours and karaoke	2834.0781514066625	4106.713435796483	335
+Gym with pet-friendly and wifi but without indoor seating and free samples and takeaway service	4908.914257710761	5343.222490742463	3105
+Pharmacy with buffet but without delivery service and onsite security and seasonal discounts	6338.654575639132	6322.985644767066	1395
+Clothing Store with live music and alcoholic beverages and arcade games but without delivery service and vegan options and 24/7 service	5321.430748301667	1636.7739307070217	1540
+Cinema with meat dishes and alcoholic beverages and 24/7 service but without parking and reservation required and wheelchair accessible	7143.985001018485	541.8731620663708	385
+Pet Store with private rooms but without seasonal discounts and gift shop and gluten-free options	2096.1472561254914	4273.482201895965	4830
+Library with private rooms and free parking and air conditioning but without 24/7 service and electric vehicle charging and pet-friendly	4856.564177097491	982.6131771643554	1705
+Hotel with happy hour but without vegan options and parking	5531.1146136558245	1385.9544823623216	4090
+Beauty Salon with free samples but without meat dishes and arcade games and air conditioning	3232.129278871844	3672.5738336142667	4875
+Bar with coupons available and alcoholic beverages but without gluten-free options and reservation required and private rooms	4940.0851463489325	7147.0413005900045	1740
+Bar with live music but without group classes and self-checkout and vegetarian meals	2319.957062862109	9284.833313167317	4210
+Zoo with valet parking but without drive-through and indoor seating and free parking	2466.830915056324	2079.375711571386	1090
