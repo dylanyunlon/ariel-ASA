@@ -257,14 +257,24 @@ private:
  *   2. Records CUDA start/stop events
  *   3. Writes latency to an accumulator
  *
- * Usage:
+ * Usage (always stack-allocate; never heap + delete — that defeats RAII):
  *   {
  *       BenchScope scope(acc, seed, query_idx, stream, "RangeQuery");
  *       // ... kernel launches ...
  *   }  // stop event recorded, NVTX range popped
+ *
+ * Disabled form (M004 review fix BUG-4): construct with a nullptr accumulator
+ * to get a no-op scope. This lets callers stack-allocate unconditionally
+ * instead of `new BenchScope(...)` + `delete` (which leaks the CUDA events if
+ * an exception is thrown between new and delete):
+ *   {
+ *       BenchScope scope(maybe_null_acc, seed, q, stream, name); // no-op if null
+ *       ...
+ *   }
  */
 class BenchScope {
 public:
+    // Enabled form: bind to a live accumulator's timer.
     BenchScope(
         QueryTimingAccumulator& acc,
         size_t seed,
@@ -272,23 +282,55 @@ public:
         cudaStream_t stream = 0,
         [[maybe_unused]] const char* nvtx_name = nullptr
     )
-        : timer_(acc.get_timer(seed, query_idx)),
+        : timer_(&acc.get_timer(seed, query_idx)),
           stream_(stream)
+#ifdef ARIEL_USE_NVTX
+        , nvtx_active_(false)
+#endif
     {
-        // FIX BUG-S5: conditional NVTX compilation
-        // Build with -DARIEL_USE_NVTX and link nvToolsExt
 #ifdef ARIEL_USE_NVTX
         if (nvtx_name) {
             nvtxRangePushA(nvtx_name);
+            nvtx_active_ = true;
         }
 #endif
-        timer_.record_start(stream_);
+        timer_->record_start(stream_);
+    }
+
+    // Disabled form (BUG-4 fix): nullptr accumulator -> no-op scope. Stack-safe.
+    BenchScope(
+        QueryTimingAccumulator* acc,
+        size_t seed,
+        size_t query_idx,
+        cudaStream_t stream = 0,
+        [[maybe_unused]] const char* nvtx_name = nullptr
+    )
+        : timer_(nullptr),
+          stream_(stream)
+#ifdef ARIEL_USE_NVTX
+        , nvtx_active_(false)
+#endif
+    {
+        if (acc != nullptr) {
+            timer_ = &acc->get_timer(seed, query_idx);
+#ifdef ARIEL_USE_NVTX
+            if (nvtx_name) {
+                nvtxRangePushA(nvtx_name);
+                nvtx_active_ = true;
+            }
+#endif
+            timer_->record_start(stream_);
+        }
     }
 
     ~BenchScope() {
-        timer_.record_stop(stream_);
+        if (timer_ != nullptr) {
+            timer_->record_stop(stream_);
+        }
 #ifdef ARIEL_USE_NVTX
-        nvtxRangePop();
+        if (nvtx_active_) {
+            nvtxRangePop();
+        }
 #endif
     }
 
@@ -296,8 +338,11 @@ public:
     BenchScope& operator=(const BenchScope&) = delete;
 
 private:
-    CudaTimerPair& timer_;
+    CudaTimerPair* timer_;   // nullptr => disabled no-op scope
     cudaStream_t stream_;
+#ifdef ARIEL_USE_NVTX
+    bool nvtx_active_;
+#endif
 };
 
 }  // namespace ariel_bench

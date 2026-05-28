@@ -44,8 +44,14 @@ public:
     void loadTensorValsToDevice();
 
     // Ariel benchmark hook (M004). When set, performQueryWithPreLoadPvals
-    // brackets each multigrid level with an ariel_bench::BenchScope, recording
-    // per-level CUDA-event latency into the accumulator under the given seed.
+    // brackets the *whole* multigrid traversal of each query with one
+    // ariel_bench::BenchScope (one CUDA start/stop pair per query index),
+    // recording the latency into the accumulator under the given seed.
+    // CAVEAT: the inner level loop currently issues a cudaDeviceSynchronize()
+    // after every kernel, so the measured interval includes those host-side
+    // syncs — it is a per-query wall-ish latency, not a pure-GPU or per-kernel
+    // time. True per-kernel CUDA-event timing (pruning/compact/sptm split) is
+    // deferred (see CODE_REVIEW BUG-5 / SYS).
     // Ownership stays with the caller; nullptr (default) disables all timing,
     // so the non-benchmark code path is unaffected.
     void setBenchAccumulator(ariel_bench::QueryTimingAccumulator* acc, size_t seed = 0);

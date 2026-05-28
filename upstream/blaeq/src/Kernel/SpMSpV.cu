@@ -4,6 +4,8 @@
 #include "SpMSpV.cuh"
 #include "src/Query/check.cuh"
 #include "src/utils/NVTXProfiler.cuh"
+#include <limits>     // BUG-3 fix: unsigned int overflow guard in v3_SOA
+#include <iostream>
 
 
 
@@ -361,14 +363,20 @@ GridAsSparseMatrix* SpTSpMMultiplication_v3(SparseTensorCscFormat* P, GridAsSpar
 
     return new GridAsSparseMatrix{P_row_nums, numDims, numProcessedNonZero, yIndex, yValue};
 }
-// SOA 对照 driver (M006)。索引提取阶段 (Step 1-3) 与 v3 完全一致——它只处理
-// row/col/pos 索引，与 vals 的内存布局无关。差异集中在 kernel launch：
+// SOA 对照 driver (M006, EXPERIMENTAL — NOT called from Query.cu).
+// See the precondition warning on SpMSpVKernelSOA_v2 in SpMSpV.cuh and
+// CODE_REVIEW BUG-1/BUG-2: this only computes correctly when P/grid value
+// buffers are physically d-major AND the d-major output is reconciled with
+// the (AOS) downstream. Kept as a reference implementation for the future
+// templated-layout rework; do not dispatch it on the is_aos_ flag alone.
+//
+// 索引提取阶段 (Step 1-3) 与 v3 完全一致——它只处理 row/col/pos 索引，
+// 与 vals 的内存布局无关。差异集中在 kernel launch：
 //   - v3:     grid 按 totalNumNoneZero (= numProcessedNonZero * numDims) 配置，
 //             每线程经 UNROLL_FACTOR 处理 4 个 (element,dim) 槽位。
 //   - v3_SOA: grid 按 numProcessedNonZero (element 数) 配置，每线程负责一个
 //             element 的全部 numDims 维，输出按 d-major 合并写。
-// 要求 d_P_values 与 grid->vals 以 SOA(d-major)存储；matrixData stride = P 的 nnz，
-// xValue stride = grid 的物理 nnz(grid_size，即 colInd 的取值域)。
+// matrixData stride = P 的 nnz，xValue stride = grid 的物理 nnz(grid_size)。
 GridAsSparseMatrix* SpTSpMMultiplication_v3_SOA(SparseTensorCscFormat* P, GridAsSparseMatrix* grid, double* d_P_values) {
     NvtxProfiler profiler("SpTSpMMultiplication_v3_SOA", NvtxProfiler::ColorMode::Fixed, NvtxProfilerColor::SpringGreen);
     const auto numDims = grid->get_dimensions();
@@ -400,11 +408,28 @@ GridAsSparseMatrix* SpTSpMMultiplication_v3_SOA(SparseTensorCscFormat* P, GridAs
     }
 
     // Step 1: 计算待处理非零元数量（与 v3 相同）
-    unsigned int numProcessedNonZero = 0;
+    // BUG-3 fix: accumulate in size_t and assert it fits unsigned int before
+    // the downstream cudaMalloc sizing. On large datasets (e.g. GIST 1M with a
+    // high-selectivity range) the expanded nnz count can exceed 2^32; the
+    // original v3 uses a bare unsigned int here and would silently wrap,
+    // under-allocating yValue and corrupting device memory.
+    size_t numProcessedNonZero_64 = 0;
     for (auto i = 0; i < grid_size; ++i) {
         const auto col = h_vectorIndex[i];
-        numProcessedNonZero += (h_matrixColPtr[col + 1] - h_matrixColPtr[col]);
+        numProcessedNonZero_64 += (h_matrixColPtr[col + 1] - h_matrixColPtr[col]);
     }
+    if (numProcessedNonZero_64 > std::numeric_limits<unsigned int>::max()) {
+        std::cerr << "SpTSpMMultiplication_v3_SOA: expanded nnz "
+                  << numProcessedNonZero_64 << " exceeds unsigned int; "
+                  << "kernel index space would overflow. Aborting this query." << std::endl;
+        delete[] h_vectorIndex;
+        if (P_attrib.type == cudaMemoryTypeDevice) {
+            delete[] h_matrixColPtr;
+            delete[] h_matrixRowInd;
+        }
+        return nullptr;
+    }
+    unsigned int numProcessedNonZero = static_cast<unsigned int>(numProcessedNonZero_64);
 
     // Step 2-3: 提取索引（与 v3 相同）
     auto* h_processedColInd = new size_t[numProcessedNonZero];

@@ -304,7 +304,21 @@ __global__ void SpMSpVKernelAOS_v2(Real* yValue,
     }
 }
 
-// SOA 对照版本 (M006)。与 SpMSpVKernelAOS_v2 计算等价，但内存布局相反：
+// SOA 对照版本 (M006, EXPERIMENTAL — NOT wired into the query path).
+//
+// ⚠️ Correctness precondition (verified the hard way, see CODE_REVIEW BUG-1):
+//   This kernel reads matrixData / xValue as d-major (column-major):
+//     matrixData[d*nnzMatrix + matPos], xValue[d*numRowsX + col].
+//   The entire BLAEQ pipeline currently stores values AOS (row-major,
+//   [elem*D + d]). Running this kernel on an AOS buffer reads the WRONG
+//   elements and returns a silently-incorrect grid (host harness: max abs
+//   diff 13.9). It is correct ONLY if the input buffers are physically
+//   transposed to d-major first AND the output (also d-major) is either
+//   transposed back to AOS or consumed by an all-SOA downstream.
+//   Neither exists yet — hence this is not dispatched from Query.cu.
+//   The right long-term fix is a templated layout (CUTLASS RowMajor/ColumnMajor
+//   tag types), not a runtime is_aos_ branch (see CODE_REVIEW SYS-1).
+//
 //   AOS_v2:  线程 index 沿展平后的 (element, dim) 主序 → dim 连续，col/matPos 经 index/numDims 间接查表
 //   SOA_v2:  一个线程处理一个 element 的全部 numDims 维 → 每个 d 的输出 yValue[d*N + elementIdx]
 //            在 warp 内对相邻 elementIdx 完全合并写入；matrixData/xValue 同样按 d-major 访问。

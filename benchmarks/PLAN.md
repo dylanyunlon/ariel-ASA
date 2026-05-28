@@ -118,16 +118,47 @@ void CUDAKmeans::uploadDataToGPU(
 
 ### 第 3 位 Claude：M006–M007 SOA Kernel 变体
 
-> ⚠️ **越界说明（由第 2 位 Claude 提前完成 M006）**：在做 M004 时通读了
-> `SpMSpV.cu`/`SpMSpV.cuh`，发现真实查询路径 `SpTSpMMultiplication_v3` 实际调用的是
-> `SpMSpVKernelAOS_v2`，而非头文件 `SpTSpMKernel.cuh` 中那个孤立的空声明
-> `SpTSpMKernelSOAImpl()`（该声明从未被接线，是误导）。真正缺的是 v2 路径的 SOA
-> 对照。第 2 位已实现 `SpMSpVKernelSOA_v2` + `SpTSpMMultiplication_v3_SOA`，并在
-> `Query.cu` 按 `grid->get_memory_arch()` 运行期分派。已用 host 对拍验证 SOA 与 AOS
-> 数值逐位等价。**M007（对比 panel）仍留给第 3 位 Claude。**
+> ⚠️ **第 2 位 Claude 的越界尝试 + 自我修正（务必读 `CODE_REVIEW_M004-M006.md`）**：
+> 做 M004 时通读 `SpMSpV.cu/.cuh`，发现真实查询路径 `SpTSpMMultiplication_v3` 调的是
+> `SpMSpVKernelAOS_v2`，而非头文件里那个从未接线的空声明 `SpTSpMKernelSOAImpl()`。
+> 于是写了 `SpMSpVKernelSOA_v2` + `SpTSpMMultiplication_v3_SOA`。
+>
+> **但随后的对抗性验证（`adversarial_harness.cpp`）证明该 SOA 路径在生产中不可用**：
+> 1. 它按 d-major 解读 buffer，但整条 pipeline 是 AOS，无布局转换层 → 静默算错
+>    （实测误差 13.9，不报错）。
+> 2. 输出 d-major，下游 kernel 按 AOS 读 → 多层串联必崩。
+> 3. `GridAsSparseMatrix::is_aos_` 只是标志位，`set` 它不会真的转置 buffer。
+>
+> **已据此回退**：`Query.cu` 撤销了基于 `is_aos_` 的运行期分派，恢复 AOS-only 正确路径。
+> SOA kernel/driver 保留为**实验性、未接线**的参考实现，头注释写明前提条件。
+>
+> **M006 正确的重做方向（移交第 3 位）**：布局应是**编译期模板参数**
+> （CUTLASS `RowMajor`/`ColumnMajor` 标签类型，见 `cutlass/include/cutlass/layout/matrix.h`），
+> 由类型系统强制 buffer 与 kernel 布局匹配——这样上述静默错误会**编译不过**而非运行期发生。
+> 需要配套的布局转换 kernel（AOS↔SOA）与全链路 SOA 支持，或在每层后转回 AOS。
 
-- **M006** — ✅（越界完成）实现 SOA 内存布局的 SpMSpV v2 kernel，与 AOS 版本对照
-- **M007** — 在 collector 中添加 AOS vs SOA 对比 panel（**待第 3 位**）
+- **M006** — ⚠️ SOA kernel 已实现但**实验性未接线**（静默错误风险已隔离）；正确的模板化重做待第 3 位
+- **M007** — 在 collector 中添加 AOS vs SOA 对比 panel（依赖 M006 真正可用后）
+
+---
+
+## 技术债登记（第 2 位 Claude 审查发现，详见 CODE_REVIEW_M004-M006.md）
+
+以下问题部分源于 baseline、部分由我的改动引入；除已修项外，均移交后续 session，
+**不擅自大改他人 baseline 代码**：
+
+| 编号 | 问题 | 状态 |
+|------|------|------|
+| BUG-1/2 | SOA 路径静默算错 + 多层布局崩塌 | ✅ 已隔离（撤销分派 + 实验性标注） |
+| BUG-3 | `numProcessedNonZero` unsigned int 溢出（大数据集） | ✅ v3_SOA 已加 size_t + 溢出断言；原 v3 同款缺陷**待修**（baseline） |
+| BUG-4 | BenchScope 裸 new/delete 异常路径泄漏 CUDA event | ✅ 已改栈上 RAII（host 验证 event 平衡） |
+| BUG-5 | per-query 计时含中间 cudaDeviceSynchronize，非纯 GPU 时间 | ⚠️ 注释已诚实化；真正 per-kernel 计时**待做** |
+| SYS-1 | 布局应模板化而非运行期 if（CUTLASS 风格） | 移交（M006 重做方向） |
+| SYS-2 | v3 与 v3_SOA ~60 行索引提取重复 → 应抽 `expand_indices()` | 待重构 |
+| SYS-3 | 每查询重复 cudaMalloc/Free，无内存池（vLLM/FairScale 风格） | 待优化（baseline 反模式） |
+| SYS-4 | SOA driver 失败返回 nullptr，未走 `QueryResult::errorCode` 统一通道 | 待统一 |
+| SYS-5 | 验证靠手写 harness，未接 CMake/CTest + GoogleTest | 待建 CI |
+| SYS-6 | CMake T-BLAEQ-bench 全量复制 T-BLAEQ，应抽公共对象库 | 待重构 |
 
 ### 第 4 位 Claude：M008–M009 GeoBloom CUDA Benchmark
 

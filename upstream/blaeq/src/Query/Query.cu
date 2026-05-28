@@ -470,22 +470,26 @@ QueryResult QueryHandler::performQueryWithPreLoadPvals(const std::string& queryP
         GridAsSparseMatrix* sort_fine_grid = nullptr;
         GridAsSparseMatrix* res = nullptr;
 
-        // Ariel benchmark hook (M004): record per-query CUDA-event latency on
-        // the default stream into the caller-supplied accumulator. The scope
-        // spans the full multigrid traversal of this query, matching the
-        // data_demo X-axis semantics (one latency sample per query index).
-        // Guarded against out-of-range query_idx so a shorter accumulator than
-        // the query file simply stops recording instead of asserting.
-        ariel_bench::BenchScope* bench_scope = nullptr;
-        if (bench_acc_ != nullptr &&
-            static_cast<size_t>(i) < bench_acc_->n_queries() &&
-            bench_seed_ < bench_acc_->n_seeds()) {
-            bench_scope = new ariel_bench::BenchScope(
-                *bench_acc_, bench_seed_, static_cast<size_t>(i),
+        // Ariel benchmark hook (M004, review-hardened).
+        // Stack-allocated RAII scope — NOT heap new/delete (BUG-4): a throw from
+        // any kernel wrapper or the "Invalid QueryType" path inside the level
+        // loop would skip a manual delete and leak the CUDA events. Stack
+        // unwinding always runs the destructor. The nested block below bounds
+        // the timed region to exactly the multigrid traversal, so host-side
+        // post-processing (volume calc, result bookkeeping) is excluded.
+        // bench_acc_ may be nullptr; the pointer-ctor overload makes that a
+        // no-op scope (see bench_timing.cuh).
+        {
+            const bool bench_in_range =
+                bench_acc_ != nullptr &&
+                static_cast<size_t>(i) < bench_acc_->n_queries() &&
+                bench_seed_ < bench_acc_->n_seeds();
+            ariel_bench::BenchScope bench_scope(
+                bench_in_range ? bench_acc_ : nullptr,
+                bench_seed_, static_cast<size_t>(i),
                 /*stream=*/0, profilerName.c_str());
-        }
 
-        for (auto l = 0; l < GPU_Index_Height - 1; ++l) {
+            for (auto l = 0; l < GPU_Index_Height - 1; ++l) {
             auto innerProfilerName = "QueryLevel" + std::to_string(l);
             NvtxProfiler innerProfiler(innerProfilerName.c_str(), NvtxProfiler::ColorMode::Fixed, NvtxProfilerColor::Green);
             bool* mask;
@@ -519,14 +523,16 @@ QueryResult QueryHandler::performQueryWithPreLoadPvals(const std::string& queryP
                 }
             }
             */
-            // M006: 按当前 grid 的内存布局运行期二选一。AOS(默认)走原 v3；
-            // 若 grid 标记为 SOA(d-major)则走 v3_SOA 对照路径。两者数值等价，
-            // 仅 vals 布局与 launch 配置不同，便于 M007 做 AOS-vs-SOA 对比 panel。
-            if (pruned_original_coreast_grid->get_memory_arch()) {
-                sort_fine_grid = SpTSpMMultiplication_v3(curr_P_Tensor, pruned_original_coreast_grid, d_P_Tensor_val);
-            } else {
-                sort_fine_grid = SpTSpMMultiplication_v3_SOA(curr_P_Tensor, pruned_original_coreast_grid, d_P_Tensor_val);
-            }
+            // SpTSpM (AOS). The SOA variant SpTSpMMultiplication_v3_SOA exists
+            // but is intentionally NOT dispatched here: it requires the grid/P
+            // value buffers to be physically transposed to d-major AND every
+            // downstream kernel (rangePruning/compactGrid) to read d-major too.
+            // Neither holds in the current AOS pipeline, so routing on the
+            // is_aos_ flag alone produced silently-wrong results (verified:
+            // benchmarks/adversarial_harness.cpp, max abs diff 13.9). Until a
+            // real layout-conversion layer (or a fully templated layout, see
+            // CODE_REVIEW SYS-1) lands, AOS is the only correct path.
+            sort_fine_grid = SpTSpMMultiplication_v3(curr_P_Tensor, pruned_original_coreast_grid, d_P_Tensor_val);
             refactor(*sort_fine_grid, d_maps[l + 1]);
 
             // xak note :: clean
@@ -539,13 +545,8 @@ QueryResult QueryHandler::performQueryWithPreLoadPvals(const std::string& queryP
             original_coreast_grid = sort_fine_grid;
 
             std::cout << "Level: " << l << " Count： " << sort_fine_grid->get_nnz_nums() << std::endl;
-        }
-
-        // Ariel benchmark hook (M004): closing the scope records the CUDA stop
-        // event on the default stream (latency read back later in
-        // QueryTimingAccumulator::synchronize_all). Done before profiler.release()
-        // so the NVTX range nesting stays balanced.
-        delete bench_scope;
+            }
+        }  // BenchScope destructs here -> CUDA stop event recorded, NVTX popped.
 
         profiler.release();
         auto t2 = std::chrono::steady_clock::now();
