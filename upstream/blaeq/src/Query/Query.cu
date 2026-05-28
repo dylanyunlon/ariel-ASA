@@ -504,7 +504,14 @@ QueryResult QueryHandler::performQueryWithPreLoadPvals(const std::string& queryP
                 }
             }
             */
-            sort_fine_grid = SpTSpMMultiplication_v3(curr_P_Tensor, pruned_original_coreast_grid, d_P_Tensor_val);
+            // M006: 按当前 grid 的内存布局运行期二选一。AOS(默认)走原 v3；
+            // 若 grid 标记为 SOA(d-major)则走 v3_SOA 对照路径。两者数值等价，
+            // 仅 vals 布局与 launch 配置不同，便于 M007 做 AOS-vs-SOA 对比 panel。
+            if (pruned_original_coreast_grid->get_memory_arch()) {
+                sort_fine_grid = SpTSpMMultiplication_v3(curr_P_Tensor, pruned_original_coreast_grid, d_P_Tensor_val);
+            } else {
+                sort_fine_grid = SpTSpMMultiplication_v3_SOA(curr_P_Tensor, pruned_original_coreast_grid, d_P_Tensor_val);
+            }
             refactor(*sort_fine_grid, d_maps[l + 1]);
 
             // xak note :: clean

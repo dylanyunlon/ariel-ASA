@@ -118,8 +118,16 @@ void CUDAKmeans::uploadDataToGPU(
 
 ### 第 3 位 Claude：M006–M007 SOA Kernel 变体
 
-- **M006** — 实现 `SpTSpMKernelSOAImpl`（SOA 内存布局的 SpTSpM kernel），与 AOS 版本对照
-- **M007** — 在 collector 中添加 AOS vs SOA 对比 panel
+> ⚠️ **越界说明（由第 2 位 Claude 提前完成 M006）**：在做 M004 时通读了
+> `SpMSpV.cu`/`SpMSpV.cuh`，发现真实查询路径 `SpTSpMMultiplication_v3` 实际调用的是
+> `SpMSpVKernelAOS_v2`，而非头文件 `SpTSpMKernel.cuh` 中那个孤立的空声明
+> `SpTSpMKernelSOAImpl()`（该声明从未被接线，是误导）。真正缺的是 v2 路径的 SOA
+> 对照。第 2 位已实现 `SpMSpVKernelSOA_v2` + `SpTSpMMultiplication_v3_SOA`，并在
+> `Query.cu` 按 `grid->get_memory_arch()` 运行期分派。已用 host 对拍验证 SOA 与 AOS
+> 数值逐位等价。**M007（对比 panel）仍留给第 3 位 Claude。**
+
+- **M006** — ✅（越界完成）实现 SOA 内存布局的 SpMSpV v2 kernel，与 AOS 版本对照
+- **M007** — 在 collector 中添加 AOS vs SOA 对比 panel（**待第 3 位**）
 
 ### 第 4 位 Claude：M008–M009 GeoBloom CUDA Benchmark
 

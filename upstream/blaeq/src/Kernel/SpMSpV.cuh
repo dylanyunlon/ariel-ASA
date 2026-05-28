@@ -304,8 +304,43 @@ __global__ void SpMSpVKernelAOS_v2(Real* yValue,
     }
 }
 
+// SOA 对照版本 (M006)。与 SpMSpVKernelAOS_v2 计算等价，但内存布局相反：
+//   AOS_v2:  线程 index 沿展平后的 (element, dim) 主序 → dim 连续，col/matPos 经 index/numDims 间接查表
+//   SOA_v2:  一个线程处理一个 element 的全部 numDims 维 → 每个 d 的输出 yValue[d*N + elementIdx]
+//            在 warp 内对相邻 elementIdx 完全合并写入；matrixData/xValue 同样按 d-major 访问。
+// 划分策略改为「按非零元」（对齐 SpMSpVKernelSOA），不再用 UNROLL_FACTOR 展平整个 (element,dim) 空间，
+// 因此 launch 时 grid 应按 totalNumNoneZero/numDims（即 element 数）配置，而非 totalNumNoneZero。
+template <typename Integer, typename Real>
+__global__ void SpMSpVKernelSOA_v2(Real* yValue,
+                                    const Integer* colInd,           // 输入向量列索引 (per element)
+                                    const Integer* matrixPosInd,     // 原始矩阵位置索引 (per element)
+                                    const Real* matrixData,          // 原始矩阵数据 (SOA: d*nnzMatrix + matPos)
+                                    const Real* xValue,              // 输入向量数据 (SOA: d*numRowsX + col)
+                                    const unsigned int numDims,
+                                    const unsigned int numNoneZero,  // element 数 = totalNumNoneZero / numDims
+                                    const unsigned int nnzMatrix,    // 原始矩阵非零元数 (SOA stride)
+                                    const unsigned int numRowsX) {   // 输入向量逻辑行数 (SOA stride)
+    if (const auto elementIdx = blockIdx.x * blockDim.x + threadIdx.x; elementIdx < numNoneZero) {
+        const auto col = colInd[elementIdx];
+        const auto matPos = matrixPosInd[elementIdx];
+#pragma unroll
+        for (auto d = 0; d < numDims; ++d) {
+            // 输出：d-major，相邻线程 (elementIdx 连续) 写 yValue 中相邻地址 → 合并写
+            const auto outIndex = d * numNoneZero + elementIdx;
+            // 输入：同样按 d-major 取，matPos/col 在每个线程内只查一次
+            yValue[outIndex] = matrixData[d * nnzMatrix + matPos] *
+                               xValue[d * numRowsX + col];
+        }
+    }
+}
+
 GridAsSparseMatrix* SpTSpMMultiplication_v2(SparseTensorCscFormat* P, GridAsSparseMatrix* grid);
 
 GridAsSparseMatrix* SpTSpMMultiplication_v3(SparseTensorCscFormat* P, GridAsSparseMatrix* grid, double* d_P_values);
+
+// SOA 内存布局的 v3 multiplication 入口 (M006)。当 P 与 grid 的 vals 以 SOA(d-major)
+// 存储时调用，内部分派到 SpMSpVKernelSOA_v2。签名与 v3 一致以便 QueryHandler 按
+// grid->get_memory_arch() 在运行期二选一。
+GridAsSparseMatrix* SpTSpMMultiplication_v3_SOA(SparseTensorCscFormat* P, GridAsSparseMatrix* grid, double* d_P_values);
 
 #endif //SPMSPV_SPMSPV_CUH

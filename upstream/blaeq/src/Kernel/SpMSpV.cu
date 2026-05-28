@@ -361,3 +361,105 @@ GridAsSparseMatrix* SpTSpMMultiplication_v3(SparseTensorCscFormat* P, GridAsSpar
 
     return new GridAsSparseMatrix{P_row_nums, numDims, numProcessedNonZero, yIndex, yValue};
 }
+// SOA 对照 driver (M006)。索引提取阶段 (Step 1-3) 与 v3 完全一致——它只处理
+// row/col/pos 索引，与 vals 的内存布局无关。差异集中在 kernel launch：
+//   - v3:     grid 按 totalNumNoneZero (= numProcessedNonZero * numDims) 配置，
+//             每线程经 UNROLL_FACTOR 处理 4 个 (element,dim) 槽位。
+//   - v3_SOA: grid 按 numProcessedNonZero (element 数) 配置，每线程负责一个
+//             element 的全部 numDims 维，输出按 d-major 合并写。
+// 要求 d_P_values 与 grid->vals 以 SOA(d-major)存储；matrixData stride = P 的 nnz，
+// xValue stride = grid 的逻辑行数。
+GridAsSparseMatrix* SpTSpMMultiplication_v3_SOA(SparseTensorCscFormat* P, GridAsSparseMatrix* grid, double* d_P_values) {
+    NvtxProfiler profiler("SpTSpMMultiplication_v3_SOA", NvtxProfiler::ColorMode::Fixed, NvtxProfilerColor::SpringGreen);
+    const auto numDims = grid->get_dimensions();
+    const auto P_row_nums = P->get_row_nums();
+    const auto P_col_nums = P->get_col_nums();
+    const auto grid_size = grid->get_nnz_nums();
+
+    size_t* h_matrixColPtr = nullptr;
+    size_t* h_matrixRowInd = nullptr;
+    double* d_matrixData = d_P_values;
+    auto* h_vectorIndex = new size_t[grid_size];
+    auto* d_vectorData = const_cast<double*>(grid->get_vals_());
+    CUDA_CHECK(cudaMemcpy(h_vectorIndex, grid->get_ids_(), grid_size * sizeof(size_t), cudaMemcpyDeviceToHost));
+
+    cudaPointerAttributes P_attrib{};
+    CUDA_CHECK(cudaPointerGetAttributes(&P_attrib, P->get_vals()));
+
+    size_t nnzMatrix = 0;  // SOA stride for matrixData
+    if (P_attrib.type == cudaMemoryTypeDevice) {
+        h_matrixColPtr = new size_t[P_col_nums + 1];
+        CUDA_CHECK(cudaMemcpy(h_matrixColPtr, P->get_col_res(), (P_col_nums + 1) * sizeof(size_t), cudaMemcpyDeviceToHost));
+        nnzMatrix = h_matrixColPtr[P_col_nums];
+        h_matrixRowInd = new size_t[nnzMatrix];
+        CUDA_CHECK(cudaMemcpy(h_matrixRowInd, P->get_row_ids(), nnzMatrix * sizeof(size_t), cudaMemcpyDeviceToHost));
+    } else {
+        h_matrixColPtr = const_cast<size_t*>(P->get_col_res());
+        h_matrixRowInd = const_cast<size_t*>(P->get_row_ids());
+        nnzMatrix = h_matrixColPtr[P_col_nums];
+    }
+
+    // Step 1: 计算待处理非零元数量（与 v3 相同）
+    unsigned int numProcessedNonZero = 0;
+    for (auto i = 0; i < grid_size; ++i) {
+        const auto col = h_vectorIndex[i];
+        numProcessedNonZero += (h_matrixColPtr[col + 1] - h_matrixColPtr[col]);
+    }
+
+    // Step 2-3: 提取索引（与 v3 相同）
+    auto* h_processedColInd = new size_t[numProcessedNonZero];
+    auto* h_processedRowInd = new size_t[numProcessedNonZero];
+    auto* h_processedMatrixPos = new size_t[numProcessedNonZero];
+    size_t* d_processedColInd = nullptr;
+    size_t* d_processedRowInd = nullptr;
+    size_t* d_processedMatrixPos = nullptr;
+    CUDA_CHECK(cudaMalloc(&d_processedColInd, numProcessedNonZero * sizeof(size_t)));
+    CUDA_CHECK(cudaMalloc(&d_processedRowInd, numProcessedNonZero * sizeof(size_t)));
+    CUDA_CHECK(cudaMalloc(&d_processedMatrixPos, numProcessedNonZero * sizeof(size_t)));
+
+    unsigned int writeIdx = 0;
+    for (auto i = 0; i < grid_size; ++i) {
+        auto col = h_vectorIndex[i];
+        auto colStart = h_matrixColPtr[col];
+        auto colEnd = h_matrixColPtr[col + 1];
+        for (auto j = colStart; j < colEnd; ++j) {
+            h_processedColInd[writeIdx] = i;
+            h_processedRowInd[writeIdx] = h_matrixRowInd[j];
+            h_processedMatrixPos[writeIdx] = j;
+            writeIdx++;
+        }
+    }
+
+    CUDA_CHECK(cudaMemcpy(d_processedColInd, h_processedColInd, numProcessedNonZero * sizeof(size_t), cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(d_processedRowInd, h_processedRowInd, numProcessedNonZero * sizeof(size_t), cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(d_processedMatrixPos, h_processedMatrixPos, numProcessedNonZero * sizeof(size_t), cudaMemcpyHostToDevice));
+
+    double* yValue;
+    const auto totalNumNoneZero = numProcessedNonZero * numDims;
+    CUDA_CHECK(cudaMalloc(&yValue, totalNumNoneZero * sizeof(double)));
+
+    // SOA launch：按 element 数配置，一个线程一个 element。
+    dim3 blockSize(256);
+    dim3 gridSize_kernel((numProcessedNonZero + blockSize.x - 1) / blockSize.x);
+    SpMSpVKernelSOA_v2<<<gridSize_kernel, blockSize>>>(yValue, d_processedColInd, d_processedMatrixPos,
+                                                       d_matrixData, d_vectorData,
+                                                       numDims, numProcessedNonZero,
+                                                       static_cast<unsigned int>(nnzMatrix),
+                                                       static_cast<unsigned int>(grid->get_num_rows()));
+    size_t* yIndex = d_processedRowInd;
+
+    if (P_attrib.type == cudaMemoryTypeDevice) {
+        delete[] h_matrixColPtr;
+        delete[] h_matrixRowInd;
+    }
+    delete[] h_vectorIndex;
+    delete[] h_processedColInd;
+    delete[] h_processedRowInd;
+    delete[] h_processedMatrixPos;
+
+    CUDA_CHECK(cudaDeviceSynchronize());
+    CUDA_CHECK(cudaFree(d_processedColInd));
+    CUDA_CHECK(cudaFree(d_processedMatrixPos));
+
+    return new GridAsSparseMatrix{P_row_nums, numDims, numProcessedNonZero, yIndex, yValue};
+}
