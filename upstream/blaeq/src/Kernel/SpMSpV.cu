@@ -368,7 +368,7 @@ GridAsSparseMatrix* SpTSpMMultiplication_v3(SparseTensorCscFormat* P, GridAsSpar
 //   - v3_SOA: grid 按 numProcessedNonZero (element 数) 配置，每线程负责一个
 //             element 的全部 numDims 维，输出按 d-major 合并写。
 // 要求 d_P_values 与 grid->vals 以 SOA(d-major)存储；matrixData stride = P 的 nnz，
-// xValue stride = grid 的逻辑行数。
+// xValue stride = grid 的物理 nnz(grid_size，即 colInd 的取值域)。
 GridAsSparseMatrix* SpTSpMMultiplication_v3_SOA(SparseTensorCscFormat* P, GridAsSparseMatrix* grid, double* d_P_values) {
     NvtxProfiler profiler("SpTSpMMultiplication_v3_SOA", NvtxProfiler::ColorMode::Fixed, NvtxProfilerColor::SpringGreen);
     const auto numDims = grid->get_dimensions();
@@ -445,7 +445,7 @@ GridAsSparseMatrix* SpTSpMMultiplication_v3_SOA(SparseTensorCscFormat* P, GridAs
                                                        d_matrixData, d_vectorData,
                                                        numDims, numProcessedNonZero,
                                                        static_cast<unsigned int>(nnzMatrix),
-                                                       static_cast<unsigned int>(grid->get_num_rows()));
+                                                       static_cast<unsigned int>(grid_size));  // FIX: xValue 的 SOA stride 是 grid 物理 nnz(colInd 取值域 0..grid_size-1),非逻辑 row_nums
     size_t* yIndex = d_processedRowInd;
 
     if (P_attrib.type == cudaMemoryTypeDevice) {

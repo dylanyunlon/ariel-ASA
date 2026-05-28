@@ -318,8 +318,8 @@ __global__ void SpMSpVKernelSOA_v2(Real* yValue,
                                     const Real* xValue,              // 输入向量数据 (SOA: d*numRowsX + col)
                                     const unsigned int numDims,
                                     const unsigned int numNoneZero,  // element 数 = totalNumNoneZero / numDims
-                                    const unsigned int nnzMatrix,    // 原始矩阵非零元数 (SOA stride)
-                                    const unsigned int numRowsX) {   // 输入向量逻辑行数 (SOA stride)
+                                    const unsigned int nnzMatrix,    // 原始矩阵非零元数 (matrixData 的 SOA stride)
+                                    const unsigned int numRowsX) {   // xValue 的 SOA stride = grid 物理 nnz(colInd 取值域),非逻辑 row_nums
     if (const auto elementIdx = blockIdx.x * blockDim.x + threadIdx.x; elementIdx < numNoneZero) {
         const auto col = colInd[elementIdx];
         const auto matPos = matrixPosInd[elementIdx];
