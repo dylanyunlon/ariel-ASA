@@ -151,6 +151,11 @@ public:
         return timers_[seed][query_idx];
     }
 
+    // Accessors (added M004) so callers can bounds-check query_idx/seed before
+    // calling get_timer(), whose assert would otherwise fire in debug builds.
+    size_t n_queries() const { return n_queries_; }
+    size_t n_seeds() const { return n_seeds_; }
+
     void synchronize_all() {
         for (auto& seed_timers : timers_) {
             for (auto& t : seed_timers) {

@@ -470,6 +470,21 @@ QueryResult QueryHandler::performQueryWithPreLoadPvals(const std::string& queryP
         GridAsSparseMatrix* sort_fine_grid = nullptr;
         GridAsSparseMatrix* res = nullptr;
 
+        // Ariel benchmark hook (M004): record per-query CUDA-event latency on
+        // the default stream into the caller-supplied accumulator. The scope
+        // spans the full multigrid traversal of this query, matching the
+        // data_demo X-axis semantics (one latency sample per query index).
+        // Guarded against out-of-range query_idx so a shorter accumulator than
+        // the query file simply stops recording instead of asserting.
+        ariel_bench::BenchScope* bench_scope = nullptr;
+        if (bench_acc_ != nullptr &&
+            static_cast<size_t>(i) < bench_acc_->n_queries() &&
+            bench_seed_ < bench_acc_->n_seeds()) {
+            bench_scope = new ariel_bench::BenchScope(
+                *bench_acc_, bench_seed_, static_cast<size_t>(i),
+                /*stream=*/0, profilerName.c_str());
+        }
+
         for (auto l = 0; l < GPU_Index_Height - 1; ++l) {
             auto innerProfilerName = "QueryLevel" + std::to_string(l);
             NvtxProfiler innerProfiler(innerProfilerName.c_str(), NvtxProfiler::ColorMode::Fixed, NvtxProfilerColor::Green);
@@ -525,6 +540,12 @@ QueryResult QueryHandler::performQueryWithPreLoadPvals(const std::string& queryP
 
             std::cout << "Level: " << l << " Count： " << sort_fine_grid->get_nnz_nums() << std::endl;
         }
+
+        // Ariel benchmark hook (M004): closing the scope records the CUDA stop
+        // event on the default stream (latency read back later in
+        // QueryTimingAccumulator::synchronize_all). Done before profiler.release()
+        // so the NVTX range nesting stays balanced.
+        delete bench_scope;
 
         profiler.release();
         auto t2 = std::chrono::steady_clock::now();
@@ -935,6 +956,11 @@ void QueryHandler::loadTensorValsToDevice() {
             d_P_Tensor_vals[i] = d_vals;
         }
     }
+}
+
+void QueryHandler::setBenchAccumulator(ariel_bench::QueryTimingAccumulator* acc, size_t seed) {
+    bench_acc_ = acc;
+    bench_seed_ = seed;
 }
 
 size_t QueryHandler::getSize() const {

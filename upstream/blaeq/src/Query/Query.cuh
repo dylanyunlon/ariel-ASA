@@ -8,6 +8,10 @@
 #include <filesystem>
 #include "src/Data_Structures/File.cuh"
 
+// Ariel benchmark integration (M004): optional per-query CUDA-event timing.
+// Header-only; pulling it in here keeps QueryHandler's member type complete.
+#include "benchmarks/cuda/bench_timing.cuh"
+
 struct QueryResult {
     ~QueryResult();
 
@@ -38,6 +42,13 @@ public:
                  int maxQueryCount = std::numeric_limits<int>::max(), size_t K = 0);
 
     void loadTensorValsToDevice();
+
+    // Ariel benchmark hook (M004). When set, performQueryWithPreLoadPvals
+    // brackets each multigrid level with an ariel_bench::BenchScope, recording
+    // per-level CUDA-event latency into the accumulator under the given seed.
+    // Ownership stays with the caller; nullptr (default) disables all timing,
+    // so the non-benchmark code path is unaffected.
+    void setBenchAccumulator(ariel_bench::QueryTimingAccumulator* acc, size_t seed = 0);
 
     [[nodiscard]] size_t getSize() const;
 
@@ -90,6 +101,10 @@ private:
     size_t* ratios;
     bool Is_AOS_Arch;
     bool isTensorInDevice = false;
+
+    // Ariel benchmark state (M004). Non-owning; nullptr means timing is off.
+    ariel_bench::QueryTimingAccumulator* bench_acc_ = nullptr;
+    size_t bench_seed_ = 0;
 };
 
 double calcRangeQueryVolume(const double* lowBounds, const double* upBounds, size_t dim);
